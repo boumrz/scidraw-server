@@ -1,1 +1,1 @@
-server: nodemon index.js
+server: npm run dev
