@@ -1,1 +1,2 @@
-server: node index.js
+install: npm i
+server: npm run dev
