@@ -10,7 +10,7 @@ const path = require('path')
 app.use(cors())
 app.use(express.json())
 
-app.ws('/', (ws) => {
+app.ws('/ws', (ws) => {
     ws.on('message', (msg) => {
         msg = JSON.parse(msg)
         switch (msg.method) {
@@ -26,11 +26,11 @@ app.ws('/', (ws) => {
 
 app.post('/image', (req, res) => {
     try {
-        const data = req.body.img.replace(`data:image/png;base64,`, '')
-        fs.writeFileSync(path.resolve(__dirname, 'files', `${req.query.id}.jpg`), data, 'base64')
-        return res.status(200).json({message: "Загружено"})
+        const data = req.body.img.replace(`data:image/png;base64,`, '');
+        fs.writeFileSync(path.resolve(__dirname, 'files', `${req.query.id}.jpg`), data, 'base64');
+        return res.status(200).json({message: "Загружено"});
     } catch (e) {
-        return res.status(500).json('error')
+        return res.status(500).json('error');
     }
 })
 app.get('/image', (req, res) => {
@@ -47,14 +47,14 @@ app.get('/image', (req, res) => {
 app.listen(PORT, () => console.log(`server started on PORT ${PORT}`))
 
 const connectionHandler = (ws, msg) => {
-    ws.id = msg.id
-    broadcastConnection(ws, msg)
+    ws.id = msg.id;
+    broadcastConnection(ws, msg);
 }
 
 const broadcastConnection = (ws, msg) => {
     aWss.clients.forEach(client => {
         if (client.id === msg.id) {
-            client.send(JSON.stringify(msg))
+            client.send(JSON.stringify(msg));
         }
-    })
+    });
 }
